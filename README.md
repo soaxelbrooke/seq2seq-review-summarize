@@ -14,6 +14,17 @@ $ ls data
 cameras  laptops  mobilephone  tablets  TVs  video_surveillance
 ```
 
+You can also just download and unzip the data:
+
+```
+$ wget http://times.cs.uiuc.edu/~wang296/Data/LARA/Amazon/AmazonReviews.zip
+$ unzip AmazonReviews.zip -d data/
+$ ls data
+cameras  laptops  mobilephone  tablets  TVs  video_surveillance
+$ rm AmazonReviews.zip
+```
+
+
 Data prep:
 
 ```
