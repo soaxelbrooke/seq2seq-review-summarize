@@ -14,4 +14,13 @@ $ ls data
 cameras  laptops  mobilephone  tablets  TVs  video_surveillance
 ```
 
+Data prep:
 
+```
+$ PYTHONPATH=$(pwd) python3 main.py prep
+$ ls data/*.csv | xargs wc -l
+    582046 data/x.csv
+    582046 data/y_overall.csv
+    582046 data/y_title.csv
+   1746138 total
+```
