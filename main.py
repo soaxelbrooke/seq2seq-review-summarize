@@ -8,6 +8,13 @@ from model_config import ModelConfig
 
 MODEL_CONFIG = ModelConfig(
     vocab_size=2**13,
+    use_cuda=True,
+    embed_size=100,
+    review_len=100,
+    summary_len=10,
+    batch_size=32,
+    context_size=100,
+    start_token='<start/>',
 )
 
 
