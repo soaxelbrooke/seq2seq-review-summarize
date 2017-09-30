@@ -22,4 +22,6 @@ def train(cfg):
     y = numpy.loadtxt('./data/y_title.csv')
 
     logging.info("Training model...")
-    model.train_epoch(x, y)
+    for epoch in range(10000):
+        logging.info("Training in epoch {}".format(epoch))
+        model.train_epoch(x, y)
