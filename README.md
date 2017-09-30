@@ -9,7 +9,7 @@ First, we need to put the data in the project root under data.  Symlinking is a 
 
 ```
 # Symlinking option
-$ ln -s ~/data/amazon-reviews-dataset/ data
+$ ln -s ~/data/amazon-reviews-dataset data
 $ ls data
 cameras  laptops  mobilephone  tablets  TVs  video_surveillance
 ```
