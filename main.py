@@ -28,6 +28,10 @@ def main(mode):
         from prep import prep
         prep(MODEL_CONFIG)
 
+    if mode == 'train':
+        from train import train
+        train(MODEL_CONFIG)
+
 
 if __name__ == '__main__':
     main(sys.argv[1])

@@ -137,7 +137,7 @@ class GruEncoder(nn.Module):
 
     def forward(self, word_idxs, hidden_state):
         embedded = self.embedding(word_idxs) \
-            .view(self.cfg.message_len, self.cfg.batch_size, self.cfg.embed_size)
+            .view(self.cfg.review_len, self.cfg.batch_size, self.cfg.embed_size)
 
         return self.rnn(embedded, hidden_state)
 
