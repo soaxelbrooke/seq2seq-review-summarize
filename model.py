@@ -116,9 +116,44 @@ class GruModel:
 
         return loss.data.sum() / self.cfg.summary_len
 
-    def evaluate(self, test_x, test_y):
-        # type: (ndarray, ndarray) -> float
-        """ Evaluates model quality on test dataset, returning loss. """
+    def predict(self, x_minibatch):
+        # type: (ndarray) -> ndarray
+        """ Predicts the response for a mini-batch """
+        assert len(x_minibatch.shape) == 2, 'minibatch should be two dimensional'
+        assert x_minibatch.shape[1] == self.cfg.review_len
+
+        x_tensor = torch.from_numpy(x_minibatch.astype('int64'))
+
+        if self.cfg.use_cuda:
+            x_tensor = x_tensor.cuda()
+
+        x = Variable(x_tensor.view(-1, self.cfg.batch_size))
+
+        y = np.array([[self.start_idx]] * self.cfg.batch_size)
+
+        self.encoder_optimizer.zero_grad()
+        self.decoder_optimizer.zero_grad()
+
+        enc_hidden_state = self.encoder.init_hidden()
+        encoder_outputs, decoder_hidden = self.encoder(x, enc_hidden_state)
+
+        decoder_input = Variable(torch.LongTensor([[self.start_idx]] * self.cfg.batch_size))
+
+        if self.cfg.use_cuda:
+            decoder_input = decoder_input.cuda()
+
+        for input_idx in range(self.cfg.summary_len):
+
+            decoder_output, decoder_hidden = self.decoder(decoder_input, decoder_hidden)
+
+            # Get the highest values and their indexes over axis 1
+            top_vals, top_idxs = decoder_output.data.topk(1)
+            decoder_input = Variable(top_idxs.squeeze())
+            print(y.shape)
+            print(decoder_input.size())
+            y = np.hstack((y, decoder_input.data.cpu().view(-1, 1).numpy()))
+
+        return y
 
 
 class GruEncoder(nn.Module):

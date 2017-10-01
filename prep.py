@@ -51,7 +51,7 @@ def review_iter():
                 review['Overall'] = float(review['Overall'])
                 review['Features'] = product_info['Features']
                 review['ProductName'] = product_info['Name']
-                review['Category'] = fpath.split(os.sep)[0]
+                review['Category'] = fpath.split(os.sep)[1]
                 yield review
             except (ValueError, AttributeError) as e:
                 logging.warning('Skipping review {} due to {}'.format(review['ReviewID'], e))
@@ -63,7 +63,7 @@ def reviews_to_x_y(model_cfg, enc, reviews):
         category, Y is a tuple of the review title, and the the overall score of the review.
     """
     x = numpy.array(list(enc.transform(['__' + r['Category'] + ' ' + r['Content'] for r in reviews],
-                                       fixed_length=model_cfg.review_len)),
+                                       reverse=True, fixed_length=model_cfg.review_len)),
                     dtype='int32')
     y_title = numpy.array(list(enc.transform([r['Title'] for r in reviews],
                                              fixed_length=model_cfg.summary_len)),
@@ -78,12 +78,13 @@ def prep(cfg: ModelConfig):
     logging.info('Loading reviews...')
     reviews = list(tqdm(review_iter(), total=TOTAL_REVIEWS))
 
-    print(len(reviews))
     logging.info("Shuffling reviews...")
     random.shuffle(reviews)
+    required_tokens = set('__' + review['Category'] for review in reviews).union({cfg.start_token})
 
     logging.info("Fitting BPE encoder with vocab size {}...".format(cfg.vocab_size))
-    encoder = Encoder(vocab_size=cfg.vocab_size, silent=False, required_tokens=[cfg.start_token])
+    encoder = Encoder(vocab_size=cfg.vocab_size, silent=False, required_tokens=required_tokens,
+                      ngram_max=2)
     encoder.fit([review['Content'] for review in tqdm(reviews)])
     encoder.save('current_encoder.json')
 
