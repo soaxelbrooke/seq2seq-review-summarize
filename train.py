@@ -44,3 +44,6 @@ def print_examples(cfg, encoder, model, x):
         logging.info("Input {}: {}".format(step, _x))
         logging.info("Response {}: {}".format(step, _y))
         step += 1
+
+        if step > 4:
+            break
