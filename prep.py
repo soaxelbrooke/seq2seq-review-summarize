@@ -83,8 +83,8 @@ def prep(cfg: ModelConfig):
     required_tokens = set('__' + review['Category'] for review in reviews).union({cfg.start_token})
 
     logging.info("Fitting BPE encoder with vocab size {}...".format(cfg.vocab_size))
-    encoder = Encoder(vocab_size=cfg.vocab_size, silent=False, required_tokens=required_tokens,
-                      ngram_max=2)
+    encoder = Encoder(vocab_size=cfg.vocab_size, silent=False, ngram_max=2,
+                      required_tokens=list(required_tokens))
     encoder.fit([review['Content'] for review in tqdm(reviews)])
     encoder.save('current_encoder.json')
 
