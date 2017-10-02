@@ -51,7 +51,7 @@ def review_iter():
                 review['Overall'] = float(review['Overall'])
                 review['Features'] = product_info['Features']
                 review['ProductName'] = product_info['Name']
-                review['Category'] = fpath.split(os.sep)[1]
+                review['Category'] = fpath.split(os.sep)[1].lower()
                 yield review
             except (ValueError, AttributeError) as e:
                 logging.warning('Skipping review {} due to {}'.format(review['ReviewID'], e))
