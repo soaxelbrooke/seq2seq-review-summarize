@@ -12,8 +12,8 @@ MODEL_CONFIG = ModelConfig(
     embed_size=100,
     review_len=100,
     summary_len=10,
-    batch_size=int(os.environ.get('BATCH_SIZE', '16')),
-    context_size=100,
+    batch_size=int(os.environ.get('BATCH_SIZE', '128')),
+    context_size=60,
     start_token='<start/>',
     attention_method='dot',
 )
