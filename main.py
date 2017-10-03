@@ -15,8 +15,7 @@ MODEL_CONFIG = ModelConfig(
     batch_size=int(os.environ.get('BATCH_SIZE', '256')),
     context_size=60,
     start_token='<start/>',
-    attention_method='dot',
-    learning_rate=0.01,
+    learning_rate=float(os.environ.get('LR', '0.001')),
 )
 
 

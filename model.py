@@ -265,10 +265,7 @@ class AttnDecoder(nn.Module):
         self.embedding = shared_embedding
         self.gru = nn.GRU(E + C + C, C, n_layers, dropout=dropout_p, batch_first=True)
         self.out = nn.Linear(C, V)
-
-        # Choose attention model
-        if cfg.attention_method != 'none':
-            self.attn = Attn(cfg)
+        self.attn = Attn(cfg)
 
     def forward(self, word_input, context, last_decoder_hidden, encoder_outputs):
         # type: (Variable, Variable, Variable, Variable) -> Variable
