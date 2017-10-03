@@ -5,6 +5,7 @@ import json
 import random
 
 import numpy
+import toolz
 from bpe import Encoder
 from numpy import ndarray
 from tqdm import tqdm
@@ -17,7 +18,7 @@ except ImportError:
     # Pre-Python3.5, alas
     pass
 
-TOTAL_REVIEWS = 582133
+TOTAL_REVIEWS = int(os.environ.get('N', '582133'))
 
 
 def review_file_iter():
@@ -76,7 +77,7 @@ def reviews_to_x_y(model_cfg, enc, reviews):
 def prep(cfg: ModelConfig):
     """ Prepares data, fits new encoder """
     logging.info('Loading reviews...')
-    reviews = list(tqdm(review_iter(), total=TOTAL_REVIEWS))
+    reviews = list(tqdm(toolz.take(TOTAL_REVIEWS, review_iter()), total=TOTAL_REVIEWS))
 
     logging.info("Shuffling reviews...")
     random.shuffle(reviews)
