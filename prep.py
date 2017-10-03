@@ -63,10 +63,11 @@ def reviews_to_x_y(model_cfg, enc, reviews):
     """ Turns a review into the X and Y vecs, where product review content prefixed by product
         category, Y is a tuple of the review title, and the the overall score of the review.
     """
-    x = numpy.array(list(enc.transform(['__' + r['Category'] + ' ' + r['Content'] for r in reviews],
-                                       reverse=True, fixed_length=model_cfg.review_len)),
+    x = numpy.array(list(enc.transform([
+        '__' + r['Category'] + ' ' + r['Content'].replace('\n', '\t') for r in reviews
+    ], reverse=True, fixed_length=model_cfg.review_len)),
                     dtype='int32')
-    y_title = numpy.array(list(enc.transform([r['Title'] for r in reviews],
+    y_title = numpy.array(list(enc.transform([r['Title'].replace('\n', '\t') for r in reviews],
                                              fixed_length=model_cfg.summary_len)),
                           dtype='int32')
     y_overall = numpy.array([[r['Overall']] for r in tqdm(reviews)], dtype='int32')
