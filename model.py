@@ -66,8 +66,10 @@ class GruModel:
         self.teacher_force_ratio = 0.5
         self.learning_rate = self.cfg.learning_rate
 
-        self.encoder_optimizer = optim.Adam(self.encoder.parameters(), lr=self.learning_rate)
-        self.decoder_optimizer = optim.Adam(self.decoder.parameters(), lr=self.learning_rate)
+        self.encoder_optimizer = optim.Adam(self.encoder.parameters(), lr=self.learning_rate,
+                                            momentum=0.9)
+        self.decoder_optimizer = optim.Adam(self.decoder.parameters(), lr=self.learning_rate,
+                                            momentum=0.9)
         self.loss_fn = nn.NLLLoss()
 
     def teacher_should_force(self):
@@ -138,8 +140,8 @@ class GruModel:
                 decoder_input = Variable(top_idxs.squeeze())
 
         loss.backward()
-        # nn.utils.clip_grad_norm(self.encoder.parameters(), self.gradient_clip)
-        # nn.utils.clip_grad_norm(self.decoder.parameters(), self.gradient_clip)
+        nn.utils.clip_grad_norm(self.encoder.parameters(), self.gradient_clip)
+        nn.utils.clip_grad_norm(self.decoder.parameters(), self.gradient_clip)
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
 
