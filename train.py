@@ -25,11 +25,15 @@ def train(cfg):
     logging.info("Loading y...")
     y = numpy.loadtxt('./data/y_title.csv')
 
+    shuffle_idx = list(range(len(x)))
+
     logging.info("Training model...")
     for epoch in range(10000):
         print_examples(cfg, encoder, model, x)
+        random.shuffle(shuffle_idx)
         logging.info("Training in epoch {}".format(epoch))
-        model.train_epoch(x, y, callback=lambda loss: get_experiment().log_metric('loss', loss))
+        model.train_epoch(x[shuffle_idx], y[shuffle_idx],
+                          callback=lambda loss: get_experiment().log_metric('loss', loss))
         get_experiment().log_epoch_end(epoch)
 
 
