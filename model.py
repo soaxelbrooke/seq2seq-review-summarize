@@ -138,8 +138,8 @@ class GruModel:
                 decoder_input = Variable(top_idxs.squeeze())
 
         loss.backward()
-        # nn.utils.clip_grad_norm(self.encoder.parameters(), self.gradient_clip)
-        # nn.utils.clip_grad_norm(self.decoder.parameters(), self.gradient_clip)
+        nn.utils.clip_grad_norm(self.encoder.parameters(), self.gradient_clip)
+        nn.utils.clip_grad_norm(self.decoder.parameters(), self.gradient_clip)
         self.encoder_optimizer.step()
         self.decoder_optimizer.step()
 
