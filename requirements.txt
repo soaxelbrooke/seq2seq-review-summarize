@@ -1,3 +1,4 @@
 git+https://github.com/soaxelbrooke/python-bpe.git@master
 pytorch
 toolz
+comet_ml
